@@ -6,7 +6,7 @@ import { CreateUserSchema, SignInSchema } from "@repo/common/types";
 import bcrypt from "bcryptjs";
 
 
-export const signup = async (req:Request, res: Response) => {
+export const signup = async (req:Request, res: Response) : Promise<any> => {
   try {
     const data = CreateUserSchema.safeParse(req.body);
     if (!data.success) {

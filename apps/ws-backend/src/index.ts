@@ -126,7 +126,8 @@ wss.on("connection", (ws,request) => {
         if (!roomId || !message) {
           return;
         }
-
+        //this appraoch is not that good ,it takes time
+        //use queues(ideal approach)
         await prismaClient.chat.create({
           data: {
             roomId,

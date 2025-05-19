@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 
-import "./globals.css";
+import "@repo/ui/globals.css";
 
+import { JetBrains_Mono, Poppins } from "next/font/google"
 
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
+
+const poppins = Poppins({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning className="dark">
       <body >
         {children}
       </body>

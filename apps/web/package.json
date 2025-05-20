@@ -11,12 +11,19 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@radix-ui/react-label": "^2.1.6",
     "@repo/ui": "workspace:*",
+    "axios": "^1.9.0",
+    "lucide-react": "0.456.0",
     "next": "^15.3.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.4",
+    "zod": "^3.25.7"
   },
   "devDependencies": {
+    "@repo/common": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",

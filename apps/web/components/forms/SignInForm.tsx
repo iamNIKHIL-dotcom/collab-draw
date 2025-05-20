@@ -15,7 +15,7 @@ import { BACKEND_URL } from "@/config";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-import { setTokenCookie } from "@/lib/cookie.ts";
+import { setTokenCookie } from "@/lib/cookie";
 import { AxiosError } from "axios";
 import { useToast } from "@repo/ui/hooks/use-toast";
 

@@ -1,11 +1,16 @@
 
+import { Socket } from "dgram"
 import { useEffect } from "react"
+import Canvas from "./Canvas";
+
 
 export function CanvasWrapper({ roomId }: {
     roomId :string
 }) {
+
+
   return (
-    <div>CanvasWrapper</div>
+    <Canvas roomId = { roomId } socket = { socket } />;
   )
 }
 

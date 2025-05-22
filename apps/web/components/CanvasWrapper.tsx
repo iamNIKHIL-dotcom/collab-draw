@@ -1,16 +1,25 @@
-
-import { Socket } from "dgram"
-import { useEffect } from "react"
+"use client";
+import { useSocket } from "@/hooks/useSocket";
+import { useEffect } from "react";
 import Canvas from "./Canvas";
 
+export function CanvasWrapper({ roomId }: { roomId: string }) {
+  const { socket, loading } = useSocket();
 
-export function CanvasWrapper({ roomId }: {
-    roomId :string
-}) {
+  useEffect(() =>{
 
+  }, [socket, roomId, loading]);
 
-  return (
-    <Canvas roomId = { roomId } socket = { socket } />;
-  )
+  if(loading){
+    return <div>
+      Loading...
+    </div>
+  }
+
+  if(!socket){
+    return <div>
+      Connecting to server...
+    </div>
+  }
+  return <Canvas roomId={roomId} socket={socket} />;
 }
-

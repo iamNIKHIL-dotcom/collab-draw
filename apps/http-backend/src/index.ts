@@ -4,11 +4,17 @@ import authMiddleware from "./middleware/authMiddleware";
 import roomRouter from "./routes/room";
 import chatRouter from "./routes/room";
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
 
 
 const app = express();
 
+app.use(
+  cors({
+    origin : "*",
+    credentials: true,
+  })
+)
 app.use(cookieParser());
 app.use(express.json());
 

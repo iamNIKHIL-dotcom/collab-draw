@@ -1,19 +1,17 @@
 import { getVerifiedToken } from "@/lib/cookie";
 import { useEffect, useState } from "react";
 import { WS_URL } from "@/config";
-import { error } from "console";
+
 export function useSocket(){
     const [ loading, setLoading ] = useState(true);
     const [ socket, setSocket ] = useState<WebSocket | null> (null);
 
     useEffect(()=>{
-
-
         let wsInstance: WebSocket | null = null;
         (async () => {
             try{
                 const token = await getVerifiedToken();
-                const ws = new WebSocket(`${WS_URL}token=${token}`)
+                const ws = new WebSocket(`${WS_URL}?token=${token}`);
                 wsInstance = ws;
 
                 ws.onopen = () =>{
@@ -38,6 +36,7 @@ export function useSocket(){
     }, []);
 
     return {
-        socket,loading
+        socket,
+        loading
     };
 }

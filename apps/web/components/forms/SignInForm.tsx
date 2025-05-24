@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -19,8 +18,11 @@ import { setTokenCookie } from "@/lib/cookie";
 import { AxiosError } from "axios";
 import { useToast } from "@repo/ui/hooks/use-toast";
 
-//@ts-ignore
-type SignInFormData = z.infer<typeof SignInSchema>;
+
+type SignInFormData = {
+  email: string;
+  password: string;
+};
 
 export function SignInForm() {
   const router = useRouter();
@@ -98,3 +100,4 @@ export function SignInForm() {
     </form>
   );
 }
+

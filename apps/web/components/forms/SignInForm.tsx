@@ -45,7 +45,10 @@ export function SignInForm() {
       const response = await axios.post(`${BACKEND_URL}/auth/signin`, data);
       const token = response.data.token;
       await setTokenCookie(token);
+      console.log("1")
       router.push("/dashboard");
+      return;
+      console.log("2")
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         setError(err.response?.data?.message || "An error occurred");

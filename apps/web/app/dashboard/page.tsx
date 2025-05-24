@@ -23,6 +23,7 @@ type Room = {
   createdAt: string;
 };
 
+
 export default function Dashboard() {
   const router = useRouter();
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -34,6 +35,8 @@ export default function Dashboard() {
       try {
         setLoading(true);
         const token = await getVerifiedToken();
+        console.log(token);
+
         const response = await axios.get(`${BACKEND_URL}/rooms`, {
           headers: {
             Authorization: `Bearer ${token}`,

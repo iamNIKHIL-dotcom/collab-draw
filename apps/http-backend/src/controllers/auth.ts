@@ -72,3 +72,27 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
     console.log(error);
   }    
 }
+
+
+export const getUser = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const userId = req.user;
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+    const user = await prismaClient.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+    res.status(200).json({ message: "User retrieved successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    console.log(error);
+  }
+};

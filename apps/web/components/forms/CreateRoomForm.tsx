@@ -67,6 +67,7 @@ export function CreateRoomForm() {
           value={roomName}
           onChange={(e) => setRoomName(e.target.value)}
           required
+          className="text-white"
         />
       </div>
       <Button type="submit" onClick={handleSubmit} disabled={loading}>

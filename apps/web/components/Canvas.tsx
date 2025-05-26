@@ -45,9 +45,16 @@ export default function CanvasRenderer({
 
     },[roomId, socket]);
 
-    useEffect(() =>{
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "h") {
+        setTool("pan");
+      }
+    };
 
-    },[]);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
 
     useEffect(() =>{
         const handleScaleChange = (newScale :number)=>{

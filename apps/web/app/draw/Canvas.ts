@@ -89,13 +89,31 @@ export class Canvas {
         this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
       }
       else if(shape.type === "circle"){
-
+this.ctx.beginPath();
+      this.ctx.arc(shape.centerX, shape.centerY, shape.radius, 0, Math.PI * 2);
+      this.ctx.stroke();
       }
       else if(shape.type === "line"){
+
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(shape.startX, shape.startY);
+        this.ctx.lineTo(shape.endX, shape.endY);
+        this.ctx.stroke();
+
 
       }
       else if(shape.type === "pencil"){
 
+        this.ctx.beginPath();
+        shape.points.forEach((point, index) => {
+          if (index === 0) {
+            this.ctx.moveTo(point.x, point.y);
+          } else {
+            this.ctx.lineTo(point.x, point.y);
+          }
+        });
+        this.ctx.stroke();
       }
     })
 
@@ -181,7 +199,11 @@ export class Canvas {
     this.startY = (e.clientY - this.offsetY) / this.scale;
 
     if(this.selectedTool === "pencil"){
-
+      this.pencilPoints = [{ x: this.startX, y: this.startY }];
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.startX, this.startY);
+      this.ctx.strokeStyle = "white";
+      this.ctx.lineCap = "round";
     }
 
   }
@@ -231,11 +253,26 @@ export class Canvas {
           height,
         };
       }else if(this.selectedTool === "circle"){
-
+        
+        const radius = Math.max(width, height) / 2;
+        const centerX = this.startX + radius;
+        const centerY = this.startY + radius;
+        shape = {
+          type: "circle",
+          radius: Math.abs(radius),
+          centerX,
+          centerY,
+        };
 
 
       }else if(this.selectedTool === "line"){
-
+        shape = {
+          type: "line",
+          startX: this.startX,
+          startY: this.startY,
+          endX,
+          endY,
+        };
 
       }
 
@@ -272,7 +309,11 @@ export class Canvas {
       const y = (e.clientY - this.offsetY) / this.scale;
 
       if(this.selectedTool === "pencil"){
-
+        const point = { x, y };
+        this.pencilPoints.push(point);
+        this.ctx.lineWidth = this.LINE_WIDTH;
+        this.ctx.lineTo(x, y);
+        this.ctx.stroke();
 
       }else{
         this.redraw();
@@ -285,10 +326,20 @@ export class Canvas {
         if(this.selectedTool ==="rect"){
           this.ctx.strokeRect(this.startX, this.startY, width, height);
         }else if(this.selectedTool === "circle"){
+          const radius = Math.max(width, height) /2;
+          const centerX = this.startX + radius;
+          const centerY = this.startY + radius;
+
+          this.ctx.beginPath();
+          this.ctx.arc(centerX,centerY, Math.abs(radius), 0, Math.PI * 2);
+          this.ctx.stroke();
 
 
         }else if(this.selectedTool === "line"){
-
+          this.ctx.beginPath();
+          this.ctx.moveTo(this.startX, this.startY);
+          this.ctx.lineTo(x, y);
+          this.ctx.stroke();
 
         }
 

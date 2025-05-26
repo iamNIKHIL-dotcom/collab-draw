@@ -15,7 +15,7 @@ export function Actionbar({
 }) {
   const activeClass = "bg-accent text-accent-foreground shadow-inner";
   const inactiveClass = "hover:bg-accent/50 text-foreground/80";
-  
+
   return (
     <div className="fixed left-1/2 top-4 -translate-x-1/2 z-50">
       <div className="flex items-center gap-1 p-1.5 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-lg border shadow-lg">
@@ -39,7 +39,15 @@ export function Actionbar({
           <Square className="h-5 w-5" />
         </Button>
         <div />
-        <Button>
+        <Button
+          size="icon"
+          variant="ghost"
+          title="Circle (C)"
+          className={`h-9 w-9 rounded-md transition-colors ${
+            tool === "circle" ? activeClass : inactiveClass
+          }`}
+          onClick={() => setSelectedTool("circle")}
+        >
           <Circle className="h-5 w-5" />
         </Button>
         <div />

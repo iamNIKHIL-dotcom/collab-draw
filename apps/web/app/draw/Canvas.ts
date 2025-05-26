@@ -142,6 +142,14 @@ export class Canvas {
     this.drawExistingShapes();
   }
 
+  resetView(){
+    this.scale = 1;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.onScaleChange?.(this.scale);
+    this.redraw();
+  }
+
   clearCanvas(){
     this.ctx.save();
     this.ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform

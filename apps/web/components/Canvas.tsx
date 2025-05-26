@@ -1,7 +1,8 @@
 "use client";
 
-import { Canvas } from "@/app/draw/Canvas";
+import { Canvas, Tool } from "@/app/draw/Canvas";
 import { useEffect,useRef,useState } from "react";
+import { Actionbar } from "./Actionbar";
 
 export default function CanvasRenderer({
     roomId,
@@ -12,6 +13,13 @@ export default function CanvasRenderer({
 }){
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [canvas, setCanvas ] = useState<Canvas>();
+    const [tool, setTool] = useState<Tool>("rect");
+    const [scale,setScale] = useState(1);
+
+    
+    useEffect(() =>{
+        canvas?.setTool(tool);
+    },[tool, canvas]);
 
 
     useEffect(() =>{
@@ -35,7 +43,20 @@ export default function CanvasRenderer({
         };
 
 
-    },[roomId, socket])
+    },[roomId, socket]);
+
+    useEffect(() =>{
+
+    },[]);
+
+    useEffect(() =>{
+        const handleScaleChange = (newScale :number)=>{
+            setScale(newScale);
+        };
+        if(canvas){
+            canvas.onScaleChange = handleScaleChange;
+        }
+    }, [canvas]);
 
     return(
         <div>
@@ -43,6 +64,14 @@ export default function CanvasRenderer({
             <canvas 
                 ref = { canvasRef }
                 className="fixed top-0 left-0 w-screen h-screen"
+            />
+            <Actionbar  
+                tool = {tool}
+                setSelectedTool={setTool}
+                onResetView={() => canvas?.resetView()}
+                scale = {scale}
+
+            
             />
 
 

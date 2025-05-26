@@ -2,7 +2,7 @@ import express from "express";
 import authRouter from "./routes/auth";
 import authMiddleware from "./middleware/authMiddleware";
 import roomRouter from "./routes/room";
-import chatRouter from "./routes/room";
+import chatRouter from "./routes/chat";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 

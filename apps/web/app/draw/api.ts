@@ -14,7 +14,14 @@ export async function getExistingShapes(slug: string) {
       },
     });
     const messages = res.data.chats || [];
-    return messages.map((message: any) => JSON.parse(message?.message));
+    return messages.map((message: any) => {
+      try {
+        return JSON.parse(message?.message);
+      } catch (e) {
+        console.error("Error parsing message:", e);
+        return null;
+      }
+    }).filter(Boolean); // Filter out any null values from failed parsing
   } catch (err: unknown) {
     if (err instanceof AxiosError) {
       toast({

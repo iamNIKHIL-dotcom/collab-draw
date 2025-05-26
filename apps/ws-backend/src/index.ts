@@ -103,6 +103,35 @@ wss.on("connection", (ws,request) => {
           return ws.close();
         }
         userRoom.rooms.push(roomId);
+        
+        // Send existing shapes when joining
+        const existingChats = await prismaClient.chat.findMany({
+          where: {
+            roomId: roomId,
+          },
+          take: 100,
+          orderBy: {
+            id: "asc", // Get shapes in chronological order
+          },
+        });
+
+        // Send each shape individually
+        for (const chat of existingChats) {
+          try {
+            const shape = JSON.parse(chat.message);
+            ws.send(
+              JSON.stringify({
+                type: "shape_update",
+                message: chat.message,
+                roomId,
+                userId: chat.userId,
+              })
+            );
+          } catch (error) {
+            console.error("Error parsing shape:", error);
+          }
+        }
+
         ws.send(JSON.stringify({ type: "join", roomId }));
       }
 

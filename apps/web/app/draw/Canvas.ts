@@ -79,6 +79,7 @@ export class Canvas {
     this.existingShapes = await getExistingShapes(this.roomId);
     this.drawExistingShapes();    
   }
+
   drawExistingShapes(){
     this.existingShapes.forEach((shape) => {
       this.ctx.strokeStyle = "white";
@@ -99,6 +100,17 @@ export class Canvas {
     })
 
   }
+
+  setTool(tool : Tool){
+    this.selectedTool = tool;
+    // Update cursor based on tool
+    if (tool === "pan") {
+      this.canvas.style.cursor = "grab";
+    } else {
+      this.canvas.style.cursor = "crosshair";
+    }
+  }
+
   initHandlers(){
     this.socket.onmessage = (event) =>{
       try{
@@ -138,6 +150,7 @@ export class Canvas {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();    
   }
+
   initMouseHandlers(){
     this.canvas.addEventListener("mousedown", this.mouseDownHandler);
     this.canvas.addEventListener("mouseup", this.mouseUpHandler);
@@ -152,7 +165,7 @@ export class Canvas {
     }
 
   }
-  mouseUpHandler = (e : MouseEvent){
+  mouseUpHandler = (e : MouseEvent) => {
     if(this.isPanning){
       this.isPanning = false;
       this.lastPanPoint = null;
@@ -187,9 +200,51 @@ export class Canvas {
 
   } 
 
-  mouseMoveHandler = (e : MouseEvent){
+  mouseMoveHandler = (e : MouseEvent) => {
+    if (this.isPanning && this.lastPanPoint) {
+      const dx = e.clientX - this.lastPanPoint.x;
+      const dy = e.clientY - this.lastPanPoint.y;
 
+      this.offsetX += dx;
+      this.offsetY += dy;
+
+      this.lastPanPoint = { x: e.clientX, y: e.clientY };
+      this.redraw();
+      return;
+    }
+
+    if(this.clicked){
+      const x = (e.clientX - this.offsetX) / this.scale;
+      const y = (e.clientY - this.offsetY) / this.scale;
+
+      if(this.selectedTool === "pencil"){
+
+
+      }else{
+        this.redraw();
+        this.ctx.strokeStyle = "white";
+        this.ctx.lineWidth = this.LINE_WIDTH;
+
+        const width = x - this.startX;
+        const height = y - this.startY;
+
+        if(this.selectedTool ==="rect"){
+          this.ctx.strokeRect(this.startX, this.startY, width, height);
+        }else if(this.selectedTool === "circle"){
+
+
+        }else if(this.selectedTool === "line"){
+
+
+        }
+
+      }
+    }
   }
 
-  destroy() {}
+  destroy() {
+    this.canvas.removeEventListener("mousedown", this.mouseDownHandler);
+    this.canvas.removeEventListener("mouseup", this.mouseUpHandler);
+    this.canvas.removeEventListener("mousemove", this.mouseMoveHandler);
+  }
 }

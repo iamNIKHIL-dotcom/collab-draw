@@ -143,6 +143,29 @@ this.ctx.beginPath();
       }
     }
 
+    ///zoom functionality
+    this.canvas.addEventListener("wheel", (e: WheelEvent) => {
+      e.preventDefault();
+
+      const delta = e.deltaY > 0 ? 0.9 : 1.1; // Zoom factor
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      // Calculate position relative to current offset
+      const pointX = (mouseX - this.offsetX) / this.scale;
+      const pointY = (mouseY - this.offsetY) / this.scale;
+
+      this.scale *= delta;
+      // Limit zoom level
+      this.scale = Math.min(Math.max(0.1, this.scale), 10);
+      this.onScaleChange?.(this.scale);
+
+      // Adjust offset to zoom into mouse position
+      this.offsetX = mouseX - pointX * this.scale;
+      this.offsetY = mouseY - pointY * this.scale;
+
+      this.redraw();
+    });
   }
 
   redraw(){

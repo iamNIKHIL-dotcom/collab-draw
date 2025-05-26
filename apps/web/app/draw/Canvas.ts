@@ -166,8 +166,20 @@ export class Canvas {
   }
   mouseDownHandler = (e :MouseEvent) =>{
     if(this.selectedTool === "pan" || e.buttons === 2 || e.button === 2){
-
+      e.preventDefault();
+      this.isPanning = true;
+      this.lastPanPoint = { x: e.clientX, y: e.clientY };
+      // Change cursor to grabbing when actively panning
+      if (this.selectedTool === "pan") {
+        this.canvas.style.cursor = "grabbing";
+      }
+      return;
     }
+
+    this.clicked = true;
+    this.startX = (e.clientX - this.offsetX) / this.scale;
+    this.startY = (e.clientY - this.offsetY) / this.scale;
+
     if(this.selectedTool === "pencil"){
 
     }
@@ -204,6 +216,40 @@ export class Canvas {
         })
       );
       this.pencilPoints = [];
+    }
+    else{
+      const width = endX - this.startX;
+      const height = endY - this.startY;
+      let shape: Shape | null = null;
+
+      if (this.selectedTool === "rect") {
+        shape = {
+          type: "rect",
+          x: this.startX,
+          y: this.startY,
+          width,
+          height,
+        };
+      }else if(this.selectedTool === "circle"){
+
+
+
+      }else if(this.selectedTool === "line"){
+
+
+      }
+
+      if(shape){
+        this.existingShapes.push(shape);
+        this.socket.send(JSON.stringify({
+          type:"shape_update",
+          message : JSON.stringify(shape),
+          roomId : Number(this.roomId)
+        }))
+      }
+
+
+
     }
 
   } 

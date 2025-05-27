@@ -84,3 +84,33 @@ export const getAllRooms = async (
     console.log(error);
   }
 };
+
+// In your room controller or route handler file
+
+export const joinRoom = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const slug = req.body.slug;
+    const userId = req.user;
+
+    if (!slug || !userId) {
+      return res.status(400).json({ message: "Invalid request" });
+    }
+
+    const room = await prismaClient.room.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    // Optionally: Check if user is already a member, and if not, add them
+
+    return res.status(200).json({ message: "Room found", roomId: room.id });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

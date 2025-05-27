@@ -16,6 +16,7 @@ import { getVerifiedToken } from "@/lib/cookie";
 import { CreateRoomForm } from "@/components/forms/CreateRoomForm";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { AxiosError } from "axios";
+import { Input } from "@repo/ui/components/input";
 
 type Room = {
   id: number;
@@ -23,12 +24,57 @@ type Room = {
   createdAt: string;
 };
 
-
 export default function Dashboard() {
   const router = useRouter();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [joinSlug, setJoinSlug] = useState("");
+
   const { toast } = useToast();
+
+  const handleJoinRoom = async () => {
+    if (!joinSlug.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a room name",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const token = await getVerifiedToken();
+      const response = await axios.post(
+        `${BACKEND_URL}/rooms/join`,
+        {
+          slug: joinSlug,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const roomId = response.data.roomId;
+
+      router.push(`/canvas/${roomId}`);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast({
+          title: "Error",
+          description: err.response?.data?.message || "Failed to join room",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "An unexpected error occurred",
+          variant: "destructive",
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -71,7 +117,24 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-foreground">
             Your Drawing Rooms
           </h1>
-          <CreateRoomForm />
+          <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:items-end">
+            <div className="flex flex-col sm:flex-row gap-2 flex-1">
+              <Input
+                placeholder="Enter room name"
+                value={joinSlug}
+                onChange={(e) => setJoinSlug(e.target.value)}
+                className="text-white w-full sm:w-64"
+              />
+              <Button onClick={handleJoinRoom} className="w-full sm:w-auto">
+                Join Room
+              </Button>
+            </div>
+
+            {/* Create Room Form will now match input/button size and layout */}
+            <div className="w-full sm:w-auto flex-1">
+              <CreateRoomForm />
+            </div>
+          </div>
         </div>
 
         {loading ? (

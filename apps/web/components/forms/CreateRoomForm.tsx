@@ -54,25 +54,27 @@ export function CreateRoomForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-row gap-3 items-center justify-center"
-    >
-      <div className="flex flex-row gap-2 items-center justify-center">
-        <Label htmlFor="roomName" className="block whitespace-nowrap">
-          Room Name
-        </Label>
-        <Input
-          id="roomName"
-          value={roomName}
-          onChange={(e) => setRoomName(e.target.value)}
-          required
-          className="text-white"
-        />
-      </div>
-      <Button type="submit" onClick={handleSubmit} disabled={loading}>
-        Create Room
-      </Button>
-    </form>
+<form
+  onSubmit={handleSubmit}
+  className="flex flex-col sm:flex-row gap-3 items-center justify-center w-full px-4"
+>
+  <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center w-full sm:w-auto">
+    <Label htmlFor="roomName" className="block whitespace-nowrap">
+      Room Name
+    </Label>
+    <Input
+      id="roomName"
+      value={roomName}
+      onChange={(e) => setRoomName(e.target.value)}
+      required
+      placeholder="Create your room"
+      className="text-white w-full sm:w-64"
+    />
+  </div>
+  <Button type="submit" onClick={handleSubmit} disabled={loading} className="w-full sm:w-auto">
+    Create Room
+  </Button>
+</form>
+
   );
 }

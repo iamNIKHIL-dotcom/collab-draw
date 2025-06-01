@@ -76,7 +76,8 @@ export class Canvas {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);   
+    this.existingShapes = await getExistingShapes(this.roomId);
     this.redraw();
   }
 
